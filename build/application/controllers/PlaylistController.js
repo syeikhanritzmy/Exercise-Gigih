@@ -10,12 +10,16 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.PlaylistController = void 0;
+const uuidUtil_1 = require("../../helpers/uuidUtil");
 function PlaylistController(PlaylistUseCase) {
     function createPlaylist(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
             try {
-                const playlist = req.body;
-                playlist.songs = [];
+                const playlist = {
+                    id: (0, uuidUtil_1.generateUUID)(),
+                    name: req.body.name,
+                    songs: [],
+                };
                 if (!playlist.name) {
                     res.status(400).json('Playlist name is required.');
                 }

@@ -55,14 +55,8 @@ exports.songRepository = {
         return song;
     }),
     getSongByPopularity: () => __awaiter(void 0, void 0, void 0, function* () {
-        try {
-            const songs = yield (0, SongFileUtil_1.readSong)();
-            const sortedSongs = songs.sort((songA, songB) => songB.playCount - songA.playCount);
-            return sortedSongs;
-        }
-        catch (error) {
-            console.error(`Failed to get songs by play count: ${error}`);
-            throw new Error('Failed to get songs by play count');
-        }
+        const songs = yield (0, SongFileUtil_1.readSong)();
+        const sortedSongs = songs.sort((songA, songB) => songB.playCount - songA.playCount);
+        return sortedSongs;
     }),
 };

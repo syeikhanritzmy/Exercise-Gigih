@@ -13,7 +13,7 @@ const controller = (0, SongController_1.SongController)(songRepository_1.songRep
 router.post('/songs/create', controller.createSong);
 router.post('/songs/:id/play', controller.playSong);
 router.get('/songs', controller.getAllSong);
-router.get('/songs/:id', controller.getSongById);
 router.get('/songs/popular', controller.getSongsByPopularity);
+router.get('/songs/:id', controller.getSongById);
 router.put('/songs/update/:id', controller.updateSong);
 router.delete('/songs/delete/:id', controller.deleteSong);

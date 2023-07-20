@@ -10,14 +10,28 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.SongController = void 0;
+const uuidUtil_1 = require("../../helpers/uuidUtil");
 function SongController(songUseCase) {
     function createSong(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
             try {
-                const song = req.body;
-                song.playCount = 0;
+                const song = {
+                    id: (0, uuidUtil_1.generateUUID)(),
+                    title: req.body.title,
+                    artists: req.body.artists,
+                    urlSongs: req.body.urlSongs,
+                    playCount: 0,
+                };
                 if (!song.title) {
                     res.status(400).json(`title song is required`);
+                }
+                if (!req.body.artists || !req.body.urlSongs) {
+                    return res.status(400).json('Artists and urlSongs are required.');
+                }
+                if (req.body.artists.length === 0 || req.body.urlSongs.length === 0) {
+                    return res
+                        .status(400)
+                        .json({ message: 'Artists and urlSongs must be non-empty arrays.' });
                 }
                 const createdSong = yield songUseCase.createSong(song);
                 return res.status(201).json(createdSong);
@@ -113,7 +127,6 @@ function SongController(songUseCase) {
         return __awaiter(this, void 0, void 0, function* () {
             try {
                 const songs = yield songUseCase.getSongByPopularity();
-                console.log(songs);
                 res.status(200).json(songs);
             }
             catch (error) {
