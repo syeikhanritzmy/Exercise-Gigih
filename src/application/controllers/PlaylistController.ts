@@ -1,12 +1,16 @@
 import { Request, Response } from 'express';
 import { Playlist } from '../../domain/models/Playlist';
 import { PlaylistUseCase } from '../interfaces/PlaylistInterface';
+import { generateUUID } from '../../helpers/uuidUtil';
 
 export function PlaylistController(PlaylistUseCase: PlaylistUseCase) {
   async function createPlaylist(req: Request, res: Response) {
     try {
-      const playlist: Playlist = req.body;
-      playlist.songs = [];
+      const playlist: Playlist = {
+        id: generateUUID(),
+        name: req.body.name,
+        songs: [],
+      };
       if (!playlist.name) {
         res.status(400).json('Playlist name is required.');
       }
@@ -88,7 +92,7 @@ export function PlaylistController(PlaylistUseCase: PlaylistUseCase) {
         playlistId,
         songId
       );
-      console.log(playlistId,songId);
+      console.log(playlistId, songId);
       if (playlist) {
         res.status(200).json(playlist);
       } else {

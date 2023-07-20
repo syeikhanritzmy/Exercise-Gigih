@@ -1,14 +1,29 @@
 import { Request, Response } from 'express';
 import { SongUseCase } from '../interfaces/SongInterface';
 import { Song } from '../../domain/models/Song';
+import { generateUUID } from '../../helpers/uuidUtil';
 
 export function SongController(songUseCase: SongUseCase) {
   async function createSong(req: Request, res: Response) {
     try {
-      const song: Song = req.body;
-      song.playCount = 0;
+      const song: Song = {
+        id: generateUUID(),
+        title: req.body.title,
+        artists: req.body.artists,
+        urlSongs: req.body.urlSongs,
+        playCount: 0,
+      };
+
       if (!song.title) {
         res.status(400).json(`title song is required`);
+      }
+      if (!req.body.artists || !req.body.urlSongs) {
+        return res.status(400).json('Artists and urlSongs are required.');
+      }
+      if (req.body.artists.length === 0 || req.body.urlSongs.length === 0) {
+        return res
+          .status(400)
+          .json({ message: 'Artists and urlSongs must be non-empty arrays.' });
       }
       const createdSong = await songUseCase.createSong(song);
       return res.status(201).json(createdSong);
